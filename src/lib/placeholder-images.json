@@ -1,3 +1,10 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "app-preview",
+      "description": "A preview screenshot of a generated application interface.",
+      "imageUrl": "https://picsum.photos/seed/codeai/800/600",
+      "imageHint": "app screenshot"
+    }
+  ]
 }
