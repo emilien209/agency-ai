@@ -88,12 +88,22 @@ export default function AgencyLandingPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-24 md:py-32 lg:py-40 text-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background">
-          <div className="container">
+        <section className="relative h-[60vh] flex items-center justify-center text-center overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            className="absolute z-0 w-full h-full object-cover"
+          >
+            <source src="https://videos.pexels.com/video-files/4767670/4767670-hd_1920_1080_25fps.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div className="absolute z-10 w-full h-full bg-black/50"></div>
+          <div className="container relative z-20">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
               Design, Development & Digital Marketing
             </h1>
-            <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground">
+            <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-300">
               We will help you get more business.
             </p>
           </div>
