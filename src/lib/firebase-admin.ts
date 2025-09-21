@@ -1,4 +1,4 @@
-import { initializeApp, getApps, App } from "firebase-admin/app";
+import { initializeApp, getApps, App, cert, getApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { credential } from "firebase-admin";
 
