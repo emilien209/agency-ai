@@ -89,15 +89,12 @@ export default function AgencyLandingPage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative h-[60vh] flex items-center justify-center text-center overflow-hidden">
-          <video
-            autoPlay
-            loop
-            muted
+          <Image
+            src="https://i.pinimg.com/736x/39/d0/88/39d08818d27d7e1136e2f30c2bf5416b.jpg"
+            alt="Abstract background image"
+            fill
             className="absolute z-0 w-full h-full object-cover"
-          >
-            <source src="https://videos.pexels.com/video-files/4767670/4767670-hd_1920_1080_25fps.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+          />
           <div className="absolute z-10 w-full h-full bg-black/50"></div>
           <div className="container relative z-20">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
