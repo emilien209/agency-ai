@@ -1,14 +1,18 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { CodeAILogo } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { CodeGenerationForm } from "@/components/code-generation-form";
 import { GenerationProgress } from "@/components/generation-progress";
 import { PreviewPanel } from "@/components/preview-panel";
+import { Button } from "@/components/ui/button";
+import { useAuth, signInWithGoogle, signOut } from "@/hooks/use-auth";
 import type { FormSchema } from "./schema";
 import { generateProjectAction } from "./actions";
+import { LogIn } from "lucide-react";
 
 type GenerationStatus = "idle" | "generating" | "testing" | "done" | "error";
 
@@ -22,6 +26,7 @@ type GenerationState = {
 export default function Home() {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const { user, loading } = useAuth();
   const [state, setState] = useState<GenerationState>({
     status: "idle",
     result: null,
@@ -33,7 +38,7 @@ export default function Home() {
     startTransition(async () => {
       setState({ status: "generating", result: null, projectName: values.projectName, error: null });
 
-      const response = await generateProjectAction(values);
+      const response = await generateProjectAction(values, user?.uid);
 
       if (response.success) {
         setState({ status: "done", result: response.data, projectName: values.projectName, error: null });
@@ -70,13 +75,38 @@ export default function Home() {
         return null;
     }
   };
+  
+  const renderAuthButton = () => {
+    if (loading) {
+      return <Button variant="ghost" disabled>Loading...</Button>;
+    }
+    if (user) {
+      return (
+        <div className="flex items-center gap-4">
+          <Link href="/projects">
+            <Button variant="outline">My Projects</Button>
+          </Link>
+          <Button variant="ghost" onClick={signOut}>Sign Out</Button>
+        </div>
+      );
+    }
+    return (
+      <Button variant="outline" onClick={signInWithGoogle}>
+        <LogIn className="mr-2 h-4 w-4" /> Sign In
+      </Button>
+    );
+  };
+
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <header className="p-4 border-b">
-        <div className="container mx-auto flex items-center gap-2">
-           <CodeAILogo className="h-8 w-8" />
-          <h1 className="text-xl font-bold tracking-tight">CodeAI</h1>
+        <div className="container mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CodeAILogo className="h-8 w-8" />
+              <h1 className="text-xl font-bold tracking-tight">CodeAI</h1>
+            </div>
+            {renderAuthButton()}
         </div>
       </header>
       <main className="flex-grow container mx-auto p-4 lg:p-8">

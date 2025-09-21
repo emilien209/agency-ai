@@ -2,9 +2,10 @@
 
 import { generateCodeFromDescription } from "@/ai/flows/generate-code-from-description";
 import { enhanceGeneratedCodeWithAutomatedTests } from "@/ai/flows/enhance-generated-code-with-automated-tests";
+import { saveProject } from "@/lib/firestore";
 import type { FormSchema } from "./schema";
 
-export async function generateProjectAction(values: FormSchema) {
+export async function generateProjectAction(values: FormSchema, userId?: string) {
   try {
     const featuresText =
       values.features && values.features.length > 0
@@ -36,6 +37,18 @@ export async function generateProjectAction(values: FormSchema) {
     
     if (!testedCodeResponse || !testedCodeResponse.enhancedCodeWithTests) {
       throw new Error("Code enhancement with tests failed.");
+    }
+
+    // Step 3: Save project if user is logged in
+    if (userId) {
+      await saveProject({
+        userId,
+        projectName: values.projectName,
+        projectDescription: fullDescription,
+        languageFramework: values.languageFramework,
+        code: testedCodeResponse.enhancedCodeWithTests,
+        createdAt: new Date(),
+      });
     }
 
     return { success: true, data: testedCodeResponse.enhancedCodeWithTests };
