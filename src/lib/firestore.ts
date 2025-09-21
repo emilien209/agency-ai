@@ -45,11 +45,23 @@ export async function getProjectsForUser(userId: string): Promise<Project[]> {
   
   const projects = querySnapshot.docs.map((doc) => {
     const data = doc.data();
+    const createdAt = data.createdAt;
+    
+    // Convert Firestore Timestamp to Date, handling both object and raw value cases
+    let createdAtDate: Date;
+    if (createdAt && typeof createdAt.toDate === 'function') {
+        createdAtDate = createdAt.toDate();
+    } else if (createdAt) {
+        // Fallback for cases where it might not be a Timestamp object
+        createdAtDate = new Date(createdAt.seconds * 1000);
+    } else {
+        createdAtDate = new Date(); // Or handle as an error
+    }
+
     return {
       id: doc.id,
       ...data,
-      // Convert Firestore Timestamp to Date
-      createdAt: (data.createdAt as Timestamp).toDate(),
+      createdAt: createdAtDate,
     } as Project;
   });
 
