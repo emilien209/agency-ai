@@ -28,24 +28,6 @@ const services = [
   },
 ];
 
-const processSteps = [
-    {
-        step: 1,
-        title: "Discovery & Strategy",
-        description: "We start by understanding your business, goals, and target audience to create a tailored strategy."
-    },
-    {
-        step: 2,
-        title: "Execution & Delivery",
-        description: "Our team gets to work, implementing the strategy with precision and delivering high-quality results on time."
-    },
-    {
-        step: 3,
-        title: "Analysis & Optimization",
-        description: "We continuously monitor performance, analyze data, and optimize our campaigns to maximize your ROI."
-    }
-]
-
 export default function AgencyLandingPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -63,10 +45,8 @@ export default function AgencyLandingPage() {
             </span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-            <Link href="#about" className="transition-colors hover:text-primary">About</Link>
             <Link href="#services" className="transition-colors hover:text-primary">Services</Link>
             <Link href="#portfolio" className="transition-colors hover:text-primary">Portfolio</Link>
-            <Link href="#process" className="transition-colors hover:text-primary">Our Process</Link>
             <Link href="#blog" className="transition-colors hover:text-primary">Blog</Link>
           </nav>
           <div className="flex flex-1 items-center justify-end space-x-4">
@@ -144,52 +124,6 @@ export default function AgencyLandingPage() {
             </div>
           </div>
         </section>
-
-        {/* Process Section */}
-        <section id="process" className="py-24 bg-secondary/20">
-            <div className="container">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold">Our Process</h2>
-                    <p className="text-muted-foreground mt-2">3 Easy Steps to Success</p>
-                </div>
-                <div className="relative grid md:grid-cols-3 gap-8">
-                     <div className="absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2 hidden md:block"></div>
-                     {processSteps.map((step) => (
-                        <div key={step.step} className="relative z-10 text-center p-6 bg-background rounded-lg border">
-                           <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground font-bold text-lg">{step.step}</div>
-                           <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                           <p className="text-muted-foreground">{step.description}</p>
-                        </div>
-                     ))}
-                </div>
-            </div>
-        </section>
-
-        {/* Why Choose Us Section */}
-        <section id="about" className="py-24">
-          <div className="container">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-bold">Why Choose Us?</h2>
-                <p className="mt-4 text-muted-foreground">
-                  We are a team of passionate experts dedicated to delivering exceptional results. Our data-driven approach and commitment to our clients' success set us apart. We don't just build websites; we build businesses.
-                </p>
-                 <Button className="mt-6">Learn More</Button>
-              </div>
-              <div className="relative aspect-square w-full max-w-md mx-auto">
-                {agencyImage && (
-                    <Image
-                        src={agencyImage.imageUrl}
-                        alt={agencyImage.description}
-                        fill
-                        className="object-cover rounded-xl shadow-2xl shadow-primary/20"
-                        data-ai-hint={agencyImage.imageHint}
-                    />
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
 
       {/* Footer */}
@@ -206,7 +140,6 @@ export default function AgencyLandingPage() {
                 <div>
                     <h4 className="font-semibold mb-4">Navigation</h4>
                     <ul className="space-y-2 text-sm text-muted-foreground">
-                        <li><Link href="#about" className="hover:text-primary">About</Link></li>
                         <li><Link href="#services" className="hover:text-primary">Services</Link></li>
                         <li><Link href="#portfolio" className="hover:text-primary">Portfolio</Link></li>
                         <li><Link href="#blog" className="hover:text-primary">Blog</Link></li>
