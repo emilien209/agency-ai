@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CodeAILogo } from "@/components/icons";
 import { BarChart, Brush, Code, Facebook, Linkedin, Twitter, Youtube } from "lucide-react";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { useAuth, signInWithGoogle } from "@/hooks/use-auth";
+import { useRouter } from "next/navigation";
 
 
 const services = [
@@ -47,6 +49,8 @@ const processSteps = [
 ]
 
 export default function AgencyLandingPage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
   const agencyImage = PlaceHolderImages.find(img => img.id === 'agency-image');
 
   return (
@@ -67,8 +71,17 @@ export default function AgencyLandingPage() {
             <Link href="#process" className="transition-colors hover:text-primary">Our Process</Link>
             <Link href="#blog" className="transition-colors hover:text-primary">Blog</Link>
           </nav>
-          <div className="flex flex-1 items-center justify-end">
-            <Button>Contact</Button>
+          <div className="flex flex-1 items-center justify-end space-x-4">
+            {loading ? null : user ? (
+              <Button onClick={() => router.push("/projects")}>My Projects</Button>
+            ) : (
+              <>
+                <Button variant="ghost" onClick={signInWithGoogle}>Sign In</Button>
+                <Button asChild>
+                  <Link href="/signup">Sign Up</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -89,12 +102,11 @@ export default function AgencyLandingPage() {
         {/* Lead Capture */}
         <section className="py-16 bg-secondary/50">
           <div className="container text-center">
-            <h2 className="text-2xl md:text-3xl font-bold">Free 30-minute Digital Marketing Consultation</h2>
-            <form className="mt-6 max-w-xl mx-auto flex flex-col sm:flex-row gap-4">
-              <Input type="text" placeholder="First Name" className="bg-background"/>
-              <Input type="email" placeholder="Email" className="bg-background"/>
-              <Button type="submit" className="bg-accent hover:bg-accent/90">Request a Quote</Button>
-            </form>
+            <h2 className="text-2xl md:text-3xl font-bold">Get Started Today</h2>
+            <p className="text-muted-foreground mt-2 mb-6">Sign up now to get started.</p>
+            <Button asChild className="bg-accent hover:bg-accent/90">
+              <Link href="/signup">Create Your Account</Link>
+            </Button>
           </div>
         </section>
 
