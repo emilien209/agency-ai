@@ -33,13 +33,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const auth = getAuth(app);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    if (app) {
+      const auth = getAuth(app);
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setUser(user);
+        setLoading(false);
+      });
+      return () => unsubscribe();
+    } else {
       setLoading(false);
-    });
-
-    return () => unsubscribe();
+    }
   }, []);
 
   return (
@@ -54,6 +57,7 @@ export const useAuth = () => {
 };
 
 export const signInWithGoogle = async () => {
+  if (!app) return;
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
   try {
@@ -64,6 +68,7 @@ export const signInWithGoogle = async () => {
 };
 
 export const signOut = async () => {
+  if (!app) return;
   const auth = getAuth(app);
   try {
     await firebaseSignOut(auth);
