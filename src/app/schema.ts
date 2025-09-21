@@ -10,3 +10,13 @@ export const signInSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
   password: z.string().min(1, { message: "Password is required." }),
 });
+
+export const formSchema = z.object({
+  description: z.string().min(1, {
+    message: "Description is required.",
+  }),
+  features: z.array(z.string()).optional(),
+  framework: z.string().min(1, {
+    message: "Framework is required.",
+  }),
+});

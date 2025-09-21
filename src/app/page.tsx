@@ -52,7 +52,6 @@ export default function AgencyLandingPage() {
           <div className="flex flex-1 items-center justify-end space-x-4">
             {loading ? null : user ? (
               <>
-                <Button onClick={() => router.push("/projects")}>My Projects</Button>
                 <Button variant="ghost" onClick={signOut}>Sign Out</Button>
               </>
             ) : (
