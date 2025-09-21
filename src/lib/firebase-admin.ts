@@ -7,10 +7,10 @@ let app: App;
 if (!getApps().length) {
   app = initializeApp({
     credential: credential.applicationDefault(),
-    databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    databaseURL: `https://code-ai-fcd40.firebaseio.com`,
+    projectId: "code-ai-fcd40",
+    storageBucket: `code-ai-fcd40.appspot.com`,
+    authDomain: `code-ai-fcd40.firebaseapp.com`,
   });
 } else {
   app = getApps()[0];

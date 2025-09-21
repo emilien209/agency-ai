@@ -6,13 +6,15 @@ import { getAnalytics, isSupported, type Analytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  "projectId": "studio-4317382558-e9dc4",
-  "appId": "1:82317380821:web:d4ba15a26d07590c82265c",
-  "apiKey": "AIzaSyDo6BKUbDymZg7oLhYcVNoxCAUePmJ7YH0",
-  "authDomain": "studio-4317382558-e9dc4.firebaseapp.com",
-  "measurementId": "G-GX4G4LNMVG",
-  "messagingSenderId": "82317380821"
+  apiKey: "AIzaSyAnX-trRfc2bVaejvR0nwwVqllAtumbIso",
+  authDomain: "code-ai-fcd40.firebaseapp.com",
+  projectId: "code-ai-fcd40",
+  storageBucket: "code-ai-fcd40.appspot.com",
+  messagingSenderId: "679217755799",
+  appId: "1:679217755799:web:f10309e35d131fe3285bd2",
+  measurementId: "G-4VMK65N3G0"
 };
+
 
 let app: App;
 let auth: Auth;
