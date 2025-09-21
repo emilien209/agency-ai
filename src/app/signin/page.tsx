@@ -14,40 +14,68 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { signUp } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signUpSchema } from "@/app/schema";
+import { signInSchema } from "@/app/schema";
 import { CodeAILogo } from "@/components/icons";
+import { emailSignIn, signInWithGitHub, signInWithGoogle } from "@/hooks/use-auth";
+import { Separator } from "@/components/ui/separator";
+import { Github, Milestone } from "lucide-react";
 
-export default function SignUpPage() {
+export default function SignInPage() {
   const { toast } = useToast();
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof signUpSchema>>({
-    resolver: zodResolver(signUpSchema),
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
-      fullName: "",
       email: "",
       password: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof signUpSchema>) {
-    const result = await signUp(values);
-
-    if (result.success) {
-      toast({
-        title: "Success",
-        description: "Your account has been created. You can now sign in.",
-      });
-      router.push("/signin");
-    } else {
+  async function onSubmit(values: z.infer<typeof signInSchema>) {
+    try {
+      const user = await emailSignIn(values.email, values.password);
+      if (user) {
+        toast({
+          title: "Success",
+          description: "You've successfully signed in.",
+        });
+        router.push("/");
+      }
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: result.error,
+        description: error.message,
+      });
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      router.push("/");
+    } catch (error: any) {
+       toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+    }
+  }
+  
+  const handleGitHubSignIn = async () => {
+    try {
+      await signInWithGitHub();
+      router.push("/");
+    } catch (error: any) {
+       toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
       });
     }
   }
@@ -62,25 +90,25 @@ export default function SignUpPage() {
         </div>
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Create an account</CardTitle>
-          <CardDescription>Enter your details below to create your account.</CardDescription>
+          <CardTitle>Sign In</CardTitle>
+          <CardDescription>Choose your preferred sign-in method.</CardDescription>
         </CardHeader>
         <CardContent>
+            <div className="space-y-4">
+                 <Button onClick={handleGoogleSignIn} variant="outline" className="w-full">
+                    <Milestone className="mr-2 h-4 w-4" />
+                    Sign in with Google
+                </Button>
+                <Button onClick={handleGitHubSignIn} variant="outline" className="w-full">
+                    <Github className="mr-2 h-4 w-4" />
+                    Sign in with GitHub
+                </Button>
+            </div>
+
+            <Separator className="my-6" />
+          
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="fullName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="John Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="email"
@@ -107,13 +135,13 @@ export default function SignUpPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">Create Account</Button>
+              <Button type="submit" className="w-full">Sign In with Email</Button>
             </form>
           </Form>
            <p className="mt-4 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link href="/signin" className="underline">
-              Sign In
+            Don't have an account?{" "}
+            <Link href="/signup" className="underline">
+              Sign Up
             </Link>
           </p>
         </CardContent>
