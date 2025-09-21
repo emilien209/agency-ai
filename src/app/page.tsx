@@ -1,118 +1,208 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useTransition, useState } from "react";
-import { useAuth, signInWithGoogle, signOut } from "@/hooks/use-auth";
-
-import { generateProjectAction } from "./actions";
-import { CodeGenerationForm } from "@/components/code-generation-form";
-import type { FormSchema } from "./schema";
-import { GenerationProgress } from "@/components/generation-progress";
-import { PreviewPanel } from "@/components/preview-panel";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CodeAILogo } from "@/components/icons";
+import { BarChart, Brush, Code, Facebook, Linkedin, Twitter, Youtube } from "lucide-react";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
-export default function Home() {
-  const [isPending, startTransition] = useTransition();
-  const [generationStatus, setGenerationStatus] = useState<"idle" | "generating" | "testing" | "done" | "error">("idle");
-  const [generatedCode, setGeneratedCode] = useState<string | null>(null);
-  const [projectName, setProjectName] = useState<string>("");
-  
-  const { user, loading: authLoading } = useAuth();
 
-  const onSubmit = (values: FormSchema) => {
-    setProjectName(values.projectName);
-    setGenerationStatus("generating");
-    startTransition(async () => {
-      // Simulate progress
-      setTimeout(() => setGenerationStatus("testing"), 2000); 
+const services = [
+  {
+    title: "Creative",
+    description: "Branding, logo design, conversion optimization. We create a brand identity that stands out and converts.",
+    icon: Brush,
+  },
+  {
+    title: "Marketing & Advertising",
+    description: "Google/YouTube Ads, Facebook Ads, LinkedIn automation. We drive targeted traffic and generate leads.",
+    icon: BarChart,
+  },
+  {
+    title: "Development",
+    description: "Web & mobile design, CRM, UX/UI, funnel optimization. We build high-performing digital experiences.",
+    icon: Code,
+  },
+];
 
-      const result = await generateProjectAction(values, user?.uid);
-
-      if (result.success) {
-        setGeneratedCode(result.data);
-        setGenerationStatus("done");
-      } else {
-        setGenerationStatus("error");
-        // Optionally, display the error message to the user
-        console.error(result.error);
-      }
-    });
-  };
-  
-  const handleReset = () => {
-    setGenerationStatus("idle");
-    setGeneratedCode(null);
-    setProjectName("");
-  };
-
-  const renderContent = () => {
-    if (generationStatus !== "idle" && generationStatus !== 'done') {
-      return <GenerationProgress status={generationStatus} />;
+const processSteps = [
+    {
+        step: 1,
+        title: "Discovery & Strategy",
+        description: "We start by understanding your business, goals, and target audience to create a tailored strategy."
+    },
+    {
+        step: 2,
+        title: "Execution & Delivery",
+        description: "Our team gets to work, implementing the strategy with precision and delivering high-quality results on time."
+    },
+    {
+        step: 3,
+        title: "Analysis & Optimization",
+        description: "We continuously monitor performance, analyze data, and optimize our campaigns to maximize your ROI."
     }
-    if (generationStatus === "done" && generatedCode) {
-      return <PreviewPanel code={generatedCode} projectName={projectName} onReset={handleReset} />;
-    }
-    return (
-      <div className="mx-auto max-w-lg">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            AI Code Generator
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Describe your project, and let our AI handle the rest. From idea to
-            code in minutes.
-          </p>
-        </div>
-        <CodeGenerationForm onSubmit={onSubmit} isPending={isPending} />
-      </div>
-    );
-  };
+]
+
+export default function AgencyLandingPage() {
+  const agencyImage = PlaceHolderImages.find(img => img.id === 'agency-image');
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center">
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-sm">
+        <div className="container flex h-16 items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <CodeAILogo className="h-8 w-8" />
-            <span className="font-bold sm:inline-block">
-              CodeAI
+            <span className="font-bold sm:inline-block text-lg">
+              Agency
             </span>
           </Link>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
-             {user && !authLoading && (
-              <Link
-                href="/projects"
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
-              >
-                My Projects
-              </Link>
-            )}
+          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+            <Link href="#about" className="transition-colors hover:text-primary">About</Link>
+            <Link href="#services" className="transition-colors hover:text-primary">Services</Link>
+            <Link href="#portfolio" className="transition-colors hover:text-primary">Portfolio</Link>
+            <Link href="#process" className="transition-colors hover:text-primary">Our Process</Link>
+            <Link href="#blog" className="transition-colors hover:text-primary">Blog</Link>
           </nav>
-          <div className="flex flex-1 items-center justify-end space-x-4">
-             {authLoading ? (
-                <Button variant="outline" disabled>Loading...</Button>
-            ) : user ? (
-                <Button onClick={signOut} variant="outline">Sign Out</Button>
-            ) : (
-                <Button onClick={signInWithGoogle}>Sign In</Button>
-            )}
+          <div className="flex flex-1 items-center justify-end">
+            <Button>Contact</Button>
           </div>
         </div>
       </header>
+
       <main className="flex-1">
-        <div className="container relative py-12 md:py-24 lg:py-32">
-          {renderContent()}
-        </div>
-      </main>
-      <footer className="py-6 md:px-8 md:py-8">
-        <div className="container flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} CodeAI. All rights reserved.
+        {/* Hero Section */}
+        <section className="relative py-24 md:py-32 lg:py-40 text-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background">
+          <div className="container">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+              Design, Development & Digital Marketing
+            </h1>
+            <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground">
+              We will help you get more business.
             </p>
-             <div className="flex items-center gap-2">
-              <CodeAILogo className="h-6 w-6" />
-              <span className="font-semibold">CodeAI</span>
+          </div>
+        </section>
+
+        {/* Lead Capture */}
+        <section className="py-16 bg-secondary/50">
+          <div className="container text-center">
+            <h2 className="text-2xl md:text-3xl font-bold">Free 30-minute Digital Marketing Consultation</h2>
+            <form className="mt-6 max-w-xl mx-auto flex flex-col sm:flex-row gap-4">
+              <Input type="text" placeholder="First Name" className="bg-background"/>
+              <Input type="email" placeholder="Email" className="bg-background"/>
+              <Button type="submit" className="bg-accent hover:bg-accent/90">Request a Quote</Button>
+            </form>
+          </div>
+        </section>
+
+        {/* Services Section */}
+        <section id="services" className="py-24">
+          <div className="container">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold">Our Services</h2>
+              <p className="text-muted-foreground mt-2">What we can do for you.</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {services.map((service) => (
+                <Card key={service.title} className="bg-secondary/30 border-secondary/50 transform hover:-translate-y-2 transition-transform duration-300">
+                  <CardHeader className="flex flex-row items-center gap-4">
+                    <div className="p-3 rounded-full bg-primary/20 text-primary">
+                        <service.icon className="h-6 w-6" />
+                    </div>
+                    <CardTitle className="text-xl">{service.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">{service.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Process Section */}
+        <section id="process" className="py-24 bg-secondary/20">
+            <div className="container">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold">Our Process</h2>
+                    <p className="text-muted-foreground mt-2">3 Easy Steps to Success</p>
+                </div>
+                <div className="relative grid md:grid-cols-3 gap-8">
+                     <div className="absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2 hidden md:block"></div>
+                     {processSteps.map((step) => (
+                        <div key={step.step} className="relative z-10 text-center p-6 bg-background rounded-lg border">
+                           <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground font-bold text-lg">{step.step}</div>
+                           <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                           <p className="text-muted-foreground">{step.description}</p>
+                        </div>
+                     ))}
+                </div>
+            </div>
+        </section>
+
+        {/* Why Choose Us Section */}
+        <section id="about" className="py-24">
+          <div className="container">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold">Why Choose Us?</h2>
+                <p className="mt-4 text-muted-foreground">
+                  We are a team of passionate experts dedicated to delivering exceptional results. Our data-driven approach and commitment to our clients' success set us apart. We don't just build websites; we build businesses.
+                </p>
+                 <Button className="mt-6">Learn More</Button>
+              </div>
+              <div className="relative aspect-square w-full max-w-md mx-auto">
+                {agencyImage && (
+                    <Image
+                        src={agencyImage.imageUrl}
+                        alt={agencyImage.description}
+                        fill
+                        className="object-cover rounded-xl shadow-2xl shadow-primary/20"
+                        data-ai-hint={agencyImage.imageHint}
+                    />
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="py-12 bg-secondary/20">
+        <div className="container">
+            <div className="grid md:grid-cols-4 gap-8">
+                <div>
+                    <Link href="/" className="flex items-center space-x-2 mb-4">
+                        <CodeAILogo className="h-8 w-8" />
+                        <span className="font-bold text-lg">Agency</span>
+                    </Link>
+                    <p className="text-muted-foreground text-sm">&copy; {new Date().getFullYear()} Agency. All rights reserved.</p>
+                </div>
+                <div>
+                    <h4 className="font-semibold mb-4">Navigation</h4>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                        <li><Link href="#about" className="hover:text-primary">About</Link></li>
+                        <li><Link href="#services" className="hover:text-primary">Services</Link></li>
+                        <li><Link href="#portfolio" className="hover:text-primary">Portfolio</Link></li>
+                        <li><Link href="#blog" className="hover:text-primary">Blog</Link></li>
+                    </ul>
+                </div>
+                <div>
+                     <h4 className="font-semibold mb-4">Contact</h4>
+                     <p className="text-sm text-muted-foreground">contact@agency.com</p>
+                </div>
+                 <div>
+                    <h4 className="font-semibold mb-4">Follow Us</h4>
+                    <div className="flex space-x-4 text-muted-foreground">
+                        <Link href="#" className="hover:text-primary"><Twitter /></Link>
+                        <Link href="#" className="hover:text-primary"><Facebook /></Link>
+                        <Link href="#" className="hover:text-primary"><Linkedin /></Link>
+                        <Link href="#" className="hover:text-primary"><Youtube /></Link>
+                    </div>
+                </div>
             </div>
         </div>
       </footer>
