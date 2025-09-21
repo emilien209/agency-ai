@@ -3,14 +3,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CodeAILogo } from "@/components/icons";
 import { BarChart, Brush, Code, Facebook, Linkedin, Twitter, Youtube } from "lucide-react";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { useAuth, signInWithGoogle } from "@/hooks/use-auth";
+import { useAuth, signOut } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-
 
 const services = [
   {
@@ -73,10 +71,15 @@ export default function AgencyLandingPage() {
           </nav>
           <div className="flex flex-1 items-center justify-end space-x-4">
             {loading ? null : user ? (
-              <Button onClick={() => router.push("/projects")}>My Projects</Button>
+              <>
+                <Button onClick={() => router.push("/projects")}>My Projects</Button>
+                <Button variant="ghost" onClick={signOut}>Sign Out</Button>
+              </>
             ) : (
               <>
-                <Button variant="ghost" onClick={signInWithGoogle}>Sign In</Button>
+                <Button variant="ghost" asChild>
+                  <Link href="/signin">Sign In</Link>
+                </Button>
                 <Button asChild>
                   <Link href="/signup">Sign Up</Link>
                 </Button>
