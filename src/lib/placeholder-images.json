@@ -1,3 +1,4 @@
+
 {
   "placeholderImages": [
     {
@@ -5,6 +6,12 @@
       "description": "A preview screenshot of a generated application interface.",
       "imageUrl": "https://picsum.photos/seed/codeai/800/600",
       "imageHint": "app screenshot"
+    },
+    {
+      "id": "agency-image",
+      "description": "Abstract image representing a digital agency.",
+      "imageUrl": "https://picsum.photos/seed/agency/600/600",
+      "imageHint": "digital agency abstract"
     }
   ]
 }
