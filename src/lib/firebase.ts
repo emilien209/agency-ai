@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp, getApps, getApp, App } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getAnalytics, isSupported } from "firebase/analytics";
+import { initializeApp, getApps, getApp, type App } from "firebase/app";
+import { getAuth, type Auth } from "firebase/auth";
+import { getFirestore, type Firestore } from "firebase/firestore";
+import { getAnalytics, isSupported, type Analytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -14,17 +14,22 @@ const firebaseConfig = {
   "messagingSenderId": "82317380821"
 };
 
-
 let app: App;
-// Initialize Firebase
-if (getApps().length === 0) {
+let auth: Auth;
+let db: Firestore;
+let analytics: Promise<Analytics | null>;
+
+if (typeof window !== 'undefined' && !getApps().length) {
     app = initializeApp(firebaseConfig);
-} else {
+    auth = getAuth(app);
+    db = getFirestore(app);
+    analytics = isSupported().then(yes => yes ? getAnalytics(app) : null);
+} else if (getApps().length > 0) {
     app = getApp();
+    auth = getAuth(app);
+    db = getFirestore(app);
+    analytics = isSupported().then(yes => yes ? getAnalytics(app) : null);
 }
 
-const analytics = isSupported().then(yes => yes ? getAnalytics(app) : null);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
+// @ts-ignore
 export { app, analytics, auth, db };
