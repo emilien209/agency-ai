@@ -2,8 +2,8 @@ import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Search Team - Digital Marketing Agency',
-  description: 'Design, Development & Digital Marketing. We will help you get more business.',
+  title: 'Code AI - Generate Your Code',
+  description: 'Generate, test, and preview code for your projects with the power of AI.',
 };
 
 export default function RootLayout({
