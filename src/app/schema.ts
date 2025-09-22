@@ -16,7 +16,5 @@ export const formSchema = z.object({
     message: "Description is required.",
   }),
   features: z.array(z.string()).optional(),
-  framework: z.string().min(1, {
-    message: "Framework is required.",
-  }),
+  framework: z.string().optional(),
 });
