@@ -13,7 +13,7 @@ import { z } from 'genkit';
 const GenerateCodeInputSchema = z.object({
   description: z.string().describe('The description of the app to generate.'),
   features: z.array(z.string()).optional().describe('The features to include in the generated code.'),
-  framework: z.string().describe('The framework to use for the generated code.'),
+  framework: z.string().optional().describe('The framework to use for the generated code.'),
 });
 export type GenerateCodeInput = z.infer<typeof GenerateCodeInputSchema>;
 
@@ -41,7 +41,7 @@ Selected Features:
 ${(input.features ?? []).join('\n- ')}
 
 Framework:
-${input.framework}
+${input.framework ?? 'Next.js'}
 
 Please generate the complete, self-contained code for the main component of the application.
 `,

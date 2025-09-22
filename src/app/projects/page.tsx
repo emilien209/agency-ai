@@ -151,31 +151,7 @@ export default function ProjectsPage() {
                     </FormItem>
                   )}
                 />
-                 <FormField
-                  control={form.control}
-                  name="framework"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Framework</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a framework" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="React">React</SelectItem>
-                          <SelectItem value="Vue">Vue</SelectItem>
-                          <SelectItem value="Angular">Angular</SelectItem>
-                          <SelectItem value="Svelte">Svelte</SelectItem>
-                          <SelectItem value="HTML/CSS/JS">HTML/CSS/JS</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
+                
                 <Button type="button" onClick={form.handleSubmit(onSuggestFeatures)} disabled={loadingFeatures}>
                   {loadingFeatures && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Suggest Features
