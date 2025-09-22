@@ -21,13 +21,12 @@ let auth: Auth;
 let db: Firestore;
 let analytics: Promise<Analytics | null>;
 
-if (typeof window !== 'undefined' && !getApps().length) {
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
-    analytics = isSupported().then(yes => yes ? getAnalytics(app) : null);
-} else if (getApps().length > 0) {
-    app = getApp();
+if (typeof window !== 'undefined') {
+    if (!getApps().length) {
+        app = initializeApp(firebaseConfig);
+    } else {
+        app = getApp();
+    }
     auth = getAuth(app);
     db = getFirestore(app);
     analytics = isSupported().then(yes => yes ? getAnalytics(app) : null);
