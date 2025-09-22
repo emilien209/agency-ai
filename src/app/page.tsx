@@ -69,7 +69,7 @@ export default function AgencyLandingPage() {
         {/* Hero Section */}
         <section className="relative h-[60vh] flex items-center justify-center text-center overflow-hidden">
            <Image
-            src="https://i.pinimg.com/736x/39/d0/88/39d08818d27d7e1136e2f30c2bf5416b.jpg"
+            src="https://i.pinimg.com/736x/29/7b/2e/297b2eb6bbbe6276c69a4f22034ba263.jpg"
             alt="Abstract background image"
             fill
             className="absolute z-0 w-full h-full object-cover"
