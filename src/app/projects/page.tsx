@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -38,6 +38,7 @@ export default function ProjectsPage() {
   const router = useRouter();
   const [suggestedFeatures, setSuggestedFeatures] = useState<string[]>([]);
   const [generatedCode, setGeneratedCode] = useState<string>("");
+  const [displayedCode, setDisplayedCode] = useState<string>("");
   const [loadingFeatures, setLoadingFeatures] = useState(false);
   const [loadingCode, setLoadingCode] = useState(false);
 
@@ -49,6 +50,23 @@ export default function ProjectsPage() {
       features: [],
     },
   });
+
+  useEffect(() => {
+    if (generatedCode) {
+      let i = 0;
+      setDisplayedCode("");
+      const typingInterval = setInterval(() => {
+        if (i < generatedCode.length) {
+          setDisplayedCode((prev) => prev + generatedCode.charAt(i));
+          i++;
+        } else {
+          clearInterval(typingInterval);
+        }
+      }, 10); // Adjust typing speed here (milliseconds)
+
+      return () => clearInterval(typingInterval);
+    }
+  }, [generatedCode]);
 
   async function onSuggestFeatures(values: z.infer<typeof formSchema>) {
     setLoadingFeatures(true);
@@ -69,6 +87,7 @@ export default function ProjectsPage() {
   async function onGenerateCode(values: z.infer<typeof formSchema>) {
     setLoadingCode(true);
     setGeneratedCode("");
+    setDisplayedCode("");
     try {
       const result = await generateCode(values);
       if (result && result.code) {
@@ -220,12 +239,12 @@ export default function ProjectsPage() {
               </form>
             </Form>
 
-            {generatedCode && (
+            {(generatedCode || loadingCode) && (
               <div className="mt-8">
                 <h3 className="text-xl font-bold mb-4">Generated Code</h3>
                 <div className="relative">
-                  <pre className="bg-secondary p-4 rounded-md overflow-x-auto text-sm">
-                    <code>{generatedCode}</code>
+                  <pre className="bg-secondary p-4 rounded-md overflow-x-auto text-sm min-h-[100px]">
+                    <code>{displayedCode}</code>
                   </pre>
                   <Button variant="secondary" size="icon" className="absolute top-2 right-2">
                     <Github className="h-4 w-4" />
