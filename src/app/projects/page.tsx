@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CodeAILogo } from "@/components/icons";
 import { Github, Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProjectsPage() {
   const { user, loading: authLoading } = useAuth();
@@ -129,19 +130,23 @@ export default function ProjectsPage() {
                   Suggest Features
                 </Button>
 
-                {suggestedFeatures.length > 0 && (
-                  <FormField
-                    control={form.control}
-                    name="features"
-                    render={() => (
-                      <FormItem>
-                        <div className="mb-4">
-                          <FormLabel className="text-base">Suggested Features</FormLabel>
-                          <FormDescription>
-                            Select the features you want to include in your application.
-                          </FormDescription>
-                        </div>
-                        {suggestedFeatures.map((feature) => (
+                {(suggestedFeatures.length > 0 || loadingFeatures) && (
+                  <FormItem>
+                    <div className="mb-4">
+                      <FormLabel className="text-base">Suggested Features</FormLabel>
+                      <FormDescription>
+                        Select the features you want to include in your application.
+                      </FormDescription>
+                    </div>
+                    <div className="space-y-3">
+                      {loadingFeatures ? (
+                        <>
+                          <Skeleton className="h-6 w-3/4" />
+                          <Skeleton className="h-6 w-1/2" />
+                          <Skeleton className="h-6 w-2/3" />
+                        </>
+                      ) : (
+                        suggestedFeatures.map((feature) => (
                            <FormField
                             key={feature}
                             control={form.control}
@@ -173,11 +178,11 @@ export default function ProjectsPage() {
                               )
                             }}
                           />
-                        ))}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                        ))
+                      )}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
                 )}
 
                 <Button type="button" onClick={form.handleSubmit(onGenerateCode)} disabled={loadingCode}>
@@ -192,7 +197,13 @@ export default function ProjectsPage() {
                 <h3 className="text-xl font-bold mb-4">Generated Code</h3>
                 <div className="relative">
                   <pre className="bg-secondary p-4 rounded-md overflow-x-auto text-sm min-h-[100px]">
-                    <code>{generatedCode}</code>
+                    {loadingCode && !generatedCode ? (
+                        <div className="flex items-center justify-center h-full">
+                            <Loader2 className="h-6 w-6 animate-spin" />
+                        </div>
+                    ) : (
+                        <code>{generatedCode}</code>
+                    )}
                   </pre>
                   <Button variant="secondary" size="icon" className="absolute top-2 right-2">
                     <Github className="h-4 w-4" />
