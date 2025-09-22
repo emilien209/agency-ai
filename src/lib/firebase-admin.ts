@@ -3,29 +3,27 @@ import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 import { credential } from "firebase-admin";
 
-let app: App | undefined;
+let app: App;
 
-try {
-    if (process.env.NODE_ENV === 'production' && process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-        if (!getApps().length) {
-            app = initializeApp({
-                credential: credential.applicationDefault(),
-                databaseURL: "https://code-ai-fcd40.firebaseio.com",
-                projectId: "code-ai-fcd40",
-                storageBucket: "code-ai-fcd40.appspot.com",
-            });
-        } else {
-            app = getApp();
-        }
-    } else {
-        // In a non-production environment, only get the app if it's already initialized.
-        // This avoids trying to initialize without credentials.
-        if (getApps().length) {
-            app = getApp();
-        }
-    }
-} catch (e) {
-    console.error("Firebase Admin initialization error:", e);
+const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
+  ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
+  : undefined;
+
+if (!getApps().length) {
+  try {
+    app = initializeApp({
+      credential: credential.cert(serviceAccount),
+      databaseURL: "https://code-ai-fcd40.firebaseio.com",
+      projectId: "code-ai-fcd40",
+      storageBucket: "code-ai-fcd40.appspot.com",
+    });
+  } catch (e) {
+    console.error("Firebase Admin initialization error", e);
+    // @ts-ignore
+    app = undefined;
+  }
+} else {
+  app = getApp();
 }
 
 

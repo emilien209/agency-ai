@@ -4,11 +4,14 @@ import { z } from "zod";
 import { generateCodeFromDescriptionFlow } from "@/ai/flows/generate-code-from-description";
 import { suggestFeaturesFromDescriptionFlow } from "@/ai/flows/suggest-features-from-description";
 import { formSchema, signUpSchema } from "./schema";
-import { auth } from "@/lib/firebase-admin";
+import { auth, db } from "@/lib/firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
 
 
 export async function signUp(values: z.infer<typeof signUpSchema>) {
+  if (!auth || !db) {
+    return { success: false, error: "Firebase Admin not initialized." };
+  }
   try {
     const userRecord = await auth.createUser({
       email: values.email,
@@ -17,7 +20,6 @@ export async function signUp(values: z.infer<typeof signUpSchema>) {
     });
 
     // Optionally, save additional user data to Firestore
-    const db = getFirestore();
     await db.collection("users").doc(userRecord.uid).set({
       fullName: values.fullName,
       email: values.email,
