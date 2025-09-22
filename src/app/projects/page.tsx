@@ -92,7 +92,7 @@ export default function ProjectsPage() {
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <CodeAILogo className="h-8 w-8" />
             <span className="font-bold sm:inline-block text-lg">
-              Code AI
+              CodeAI
             </span>
           </Link>
         </div>

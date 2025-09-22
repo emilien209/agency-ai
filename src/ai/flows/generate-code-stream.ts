@@ -17,7 +17,11 @@ export type GenerateCodeInput = z.infer<typeof GenerateCodeInputSchema>;
 
 export async function generateCodeStream(input: GenerateCodeInput) {
   const { stream } = ai.generateStream({
-    prompt: `You are a code generation AI.
+    prompt: `You are an expert code generation AI.
+Your sole purpose is to generate clean, complete, and self-contained code based on the user's request.
+Do not add any conversational text, explanations, or markdown formatting around the code.
+Only output the raw code.
+
 Generate code for an application based on the following description:
 
 Description:
