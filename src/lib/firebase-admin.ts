@@ -17,14 +17,10 @@ try {
         } else {
             app = getApp();
         }
-    } else if (process.env.NODE_ENV !== 'production') {
-        // For non-production environments, you might use a service account file
-        // or other logic. For now, we are preventing initialization if not in prod
-        // to avoid ADC errors in local dev.
-        if (!getApps().length) {
-            // Check for a service account key, but don't require it for local dev to avoid crashing.
-            // This part is now more defensive.
-        } else {
+    } else {
+        // In a non-production environment, only get the app if it's already initialized.
+        // This avoids trying to initialize without credentials.
+        if (getApps().length) {
             app = getApp();
         }
     }
