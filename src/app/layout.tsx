@@ -4,8 +4,8 @@ import { AuthProvider } from "@/hooks/use-auth";
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Digital Agency - Design, Development & Marketing',
-  description: 'We help you get more business with our creative, marketing, and development services.',
+  title: 'CodeAI - AI-Powered Code Generation',
+  description: 'Generate complete application boilerplates from a simple text description.',
 };
 
 export default function RootLayout({
@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark h-full">
+    <html lang="en" className="h-full">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

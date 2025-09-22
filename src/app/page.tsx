@@ -6,32 +6,28 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CodeAILogo } from "@/components/icons";
 import { BarChart, Brush, Code, Facebook, Linkedin, Twitter, Youtube } from "lucide-react";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { useAuth, signOut } from "@/hooks/use-auth";
-import { useRouter } from "next/navigation";
 
 const services = [
   {
-    title: "Creative",
-    description: "Branding, logo design, conversion optimization. We create a brand identity that stands out and converts.",
+    title: "AI-Powered Generation",
+    description: "Describe your application in natural language, and let our AI generate the complete codebase for you.",
     icon: Brush,
   },
   {
-    title: "Marketing & Advertising",
-    description: "Google/YouTube Ads, Facebook Ads, LinkedIn automation. We drive targeted traffic and generate leads.",
+    title: "Multi-Framework Support",
+    description: "Generate projects for popular stacks like Next.js, React, Vue, and more. We handle the boilerplate.",
     icon: BarChart,
   },
   {
-    title: "Development",
-    description: "Web & mobile design, CRM, UX/UI, funnel optimization. We build high-performing digital experiences.",
+    title: "Download & Deploy",
+    description: "Export your generated code as a ZIP file or deploy it directly to platforms like Vercel and Netlify.",
     icon: Code,
   },
 ];
 
 export default function AgencyLandingPage() {
   const { user, loading } = useAuth();
-  const router = useRouter();
-  const agencyImage = PlaceHolderImages.find(img => img.id === 'agency-image');
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
@@ -41,17 +37,18 @@ export default function AgencyLandingPage() {
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <CodeAILogo className="h-8 w-8" />
             <span className="font-bold sm:inline-block text-lg">
-              Agency
+              CodeAI
             </span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-            <Link href="#services" className="transition-colors hover:text-primary">Services</Link>
-            <Link href="#portfolio" className="transition-colors hover:text-primary">Portfolio</Link>
-            <Link href="#blog" className="transition-colors hover:text-primary">Blog</Link>
+            <Link href="#services" className="transition-colors hover:text-primary">Features</Link>
           </nav>
           <div className="flex flex-1 items-center justify-end space-x-4">
             {loading ? null : user ? (
               <>
+                <Button variant="ghost" asChild>
+                    <Link href="/projects">My Projects</Link>
+                </Button>
                 <Button variant="ghost" onClick={signOut}>Sign Out</Button>
               </>
             ) : (
@@ -80,10 +77,10 @@ export default function AgencyLandingPage() {
           <div className="absolute z-10 w-full h-full bg-black/50"></div>
           <div className="container relative z-20">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-              Design, Development & Digital Marketing
+              Build & Deploy Apps with AI
             </h1>
             <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-300">
-              We will help you get more business.
+              Describe your idea. Let AI generate the code. Download or deploy in one click.
             </p>
           </div>
         </section>
@@ -91,8 +88,8 @@ export default function AgencyLandingPage() {
         {/* Lead Capture */}
         <section className="py-16 bg-secondary/50">
           <div className="container text-center">
-            <h2 className="text-2xl md:text-3xl font-bold">Get Started Today</h2>
-            <p className="text-muted-foreground mt-2 mb-6">Sign up now to get started.</p>
+            <h2 className="text-2xl md:text-3xl font-bold">Get Started in Seconds</h2>
+            <p className="text-muted-foreground mt-2 mb-6">Create an account to start building your first AI-generated application.</p>
             <Button asChild className="bg-accent hover:bg-accent/90">
               <Link href="/signup">Create Your Account</Link>
             </Button>
@@ -103,12 +100,12 @@ export default function AgencyLandingPage() {
         <section id="services" className="py-24">
           <div className="container">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold">Our Services</h2>
-              <p className="text-muted-foreground mt-2">What we can do for you.</p>
+              <h2 className="text-3xl md:text-4xl font-bold">Core Features</h2>
+              <p className="text-muted-foreground mt-2">Everything you need to go from idea to deployment.</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {services.map((service) => (
-                <Card key={service.title} className="bg-secondary/30 border-secondary/50 transform hover:-translate-y-2 transition-transform duration-300">
+                <Card key={service.title} className="bg-card transform hover:-translate-y-2 transition-transform duration-300">
                   <CardHeader className="flex flex-row items-center gap-4">
                     <div className="p-3 rounded-full bg-primary/20 text-primary">
                         <service.icon className="h-6 w-6" />
@@ -132,21 +129,19 @@ export default function AgencyLandingPage() {
                 <div>
                     <Link href="/" className="flex items-center space-x-2 mb-4">
                         <CodeAILogo className="h-8 w-8" />
-                        <span className="font-bold text-lg">Agency</span>
+                        <span className="font-bold text-lg">CodeAI</span>
                     </Link>
-                    <p className="text-muted-foreground text-sm">&copy; {new Date().getFullYear()} Agency. All rights reserved.</p>
+                    <p className="text-muted-foreground text-sm">&copy; {new Date().getFullYear()} CodeAI. All rights reserved.</p>
                 </div>
                 <div>
                     <h4 className="font-semibold mb-4">Navigation</h4>
                     <ul className="space-y-2 text-sm text-muted-foreground">
-                        <li><Link href="#services" className="hover:text-primary">Services</Link></li>
-                        <li><Link href="#portfolio" className="hover:text-primary">Portfolio</Link></li>
-                        <li><Link href="#blog" className="hover:text-primary">Blog</Link></li>
+                        <li><Link href="#services" className="hover:text-primary">Features</Link></li>
                     </ul>
                 </div>
                 <div>
                      <h4 className="font-semibold mb-4">Contact</h4>
-                     <p className="text-sm text-muted-foreground">contact@agency.com</p>
+                     <p className="text-sm text-muted-foreground">contact@codeai.dev</p>
                 </div>
                  <div>
                     <h4 className="font-semibold mb-4">Follow Us</h4>

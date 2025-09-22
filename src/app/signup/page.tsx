@@ -57,7 +57,7 @@ export default function SignUpPage() {
         <div className="absolute top-4 left-4">
             <Link href="/" className="flex items-center space-x-2">
                 <CodeAILogo className="h-8 w-8" />
-                <span className="font-bold text-lg">Agency</span>
+                <span className="font-bold text-lg">CodeAI</span>
             </Link>
         </div>
       <Card className="w-full max-w-md">

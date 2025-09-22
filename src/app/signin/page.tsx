@@ -43,7 +43,7 @@ export default function SignInPage() {
           title: "Success",
           description: "You've successfully signed in.",
         });
-        router.push("/");
+        router.push("/projects");
       }
     } catch (error: any) {
       toast({
@@ -57,7 +57,7 @@ export default function SignInPage() {
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
-      router.push("/");
+      router.push("/projects");
     } catch (error: any) {
        toast({
         variant: "destructive",
@@ -70,7 +70,7 @@ export default function SignInPage() {
   const handleGitHubSignIn = async () => {
     try {
       await signInWithGitHub();
-      router.push("/");
+      router.push("/projects");
     } catch (error: any) {
        toast({
         variant: "destructive",
@@ -85,7 +85,7 @@ export default function SignInPage() {
         <div className="absolute top-4 left-4">
             <Link href="/" className="flex items-center space-x-2">
                 <CodeAILogo className="h-8 w-8" />
-                <span className="font-bold text-lg">Agency</span>
+                <span className="font-bold text-lg">CodeAI</span>
             </Link>
         </div>
       <Card className="w-full max-w-md">
