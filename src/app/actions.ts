@@ -3,10 +3,9 @@
 import { z } from "zod";
 import { generateCodeFromDescriptionFlow } from "@/ai/flows/generate-code-from-description";
 import { suggestFeaturesFromDescriptionFlow } from "@/ai/flows/suggest-features-from-description";
+import { generateCodeStream } from "@/ai/flows/generate-code-stream";
 import { formSchema, signUpSchema } from "./schema";
 import { auth, db } from "@/lib/firebase-admin";
-import { getFirestore } from "firebase-admin/firestore";
-
 
 export async function signUp(values: z.infer<typeof signUpSchema>) {
   if (!auth || !db) {
@@ -39,4 +38,8 @@ export async function suggestFeatures(values: z.infer<typeof formSchema>) {
 export async function generateCode(values: z.infer<typeof formSchema>) {
   const result = await generateCodeFromDescriptionFlow(values);
   return result;
+}
+
+export async function generateCodeStreaming(values: z.infer<typeof formSchema>) {
+  return generateCodeStream(values);
 }

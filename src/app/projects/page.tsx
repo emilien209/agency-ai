@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -14,18 +14,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { suggestFeatures, generateCode } from "@/app/actions";
+import { suggestFeatures, generateCodeStreaming } from "@/app/actions";
 import { formSchema } from "@/app/schema";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
@@ -38,7 +30,6 @@ export default function ProjectsPage() {
   const router = useRouter();
   const [suggestedFeatures, setSuggestedFeatures] = useState<string[]>([]);
   const [generatedCode, setGeneratedCode] = useState<string>("");
-  const [displayedCode, setDisplayedCode] = useState<string>("");
   const [loadingFeatures, setLoadingFeatures] = useState(false);
   const [loadingCode, setLoadingCode] = useState(false);
 
@@ -46,27 +37,9 @@ export default function ProjectsPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       description: "",
-      framework: "React",
       features: [],
     },
   });
-
-  useEffect(() => {
-    if (generatedCode) {
-      let i = 0;
-      setDisplayedCode("");
-      const typingInterval = setInterval(() => {
-        if (i < generatedCode.length) {
-          setDisplayedCode((prev) => prev + generatedCode.charAt(i));
-          i++;
-        } else {
-          clearInterval(typingInterval);
-        }
-      }, 10); // Adjust typing speed here (milliseconds)
-
-      return () => clearInterval(typingInterval);
-    }
-  }, [generatedCode]);
 
   async function onSuggestFeatures(values: z.infer<typeof formSchema>) {
     setLoadingFeatures(true);
@@ -87,11 +60,10 @@ export default function ProjectsPage() {
   async function onGenerateCode(values: z.infer<typeof formSchema>) {
     setLoadingCode(true);
     setGeneratedCode("");
-    setDisplayedCode("");
     try {
-      const result = await generateCode(values);
-      if (result && result.code) {
-        setGeneratedCode(result.code);
+      const stream = await generateCodeStreaming(values);
+      for await (const chunk of stream) {
+        setGeneratedCode(prev => prev + chunk);
       }
     } catch (error) {
       console.error("Error generating code:", error);
@@ -220,7 +192,7 @@ export default function ProjectsPage() {
                 <h3 className="text-xl font-bold mb-4">Generated Code</h3>
                 <div className="relative">
                   <pre className="bg-secondary p-4 rounded-md overflow-x-auto text-sm min-h-[100px]">
-                    <code>{displayedCode}</code>
+                    <code>{generatedCode}</code>
                   </pre>
                   <Button variant="secondary" size="icon" className="absolute top-2 right-2">
                     <Github className="h-4 w-4" />
